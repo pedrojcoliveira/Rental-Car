@@ -1,0 +1,27 @@
+﻿@model Rental_Car_Project.Models.RentalContract
+
+@{
+    ViewData["Title"] = "Detalhes do Contrato";
+}
+
+<h1>Contrato n.º @Model.Id</h1>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">Cliente</dt>
+    <dd class="col-sm-9">@Model.Client?.Name (@Model.Client?.Email)</dd>
+
+    <dt class="col-sm-3">Veículo</dt>
+    <dd class="col-sm-9">@Model.Vehicle?.Brand @Model.Vehicle?.Model (@Model.Vehicle?.LicensePlate)</dd>
+
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.StartDate)</dt>
+    <dd class="col-sm-9">@Model.StartDate?.ToString("dd/MM/yyyy")</dd>
+
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.EndDate)</dt>
+    <dd class="col-sm-9">@Model.EndDate?.ToString("dd/MM/yyyy")</dd>
+
+    <dt class="col-sm-3">@Html.DisplayNameFor(m => m.InitialMileage)</dt>
+    <dd class="col-sm-9">@Model.InitialMileage?.ToString("N0") km</dd>
+</dl>
+
+<a asp-action="Index" class="btn btn-outline-secondary">Voltar à lista</a>

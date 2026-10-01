@@ -1,0 +1,63 @@
+﻿@model IEnumerable<Rental_Car_Project.Models.RentalContract>
+
+@{
+    ViewData["Title"] = "Contratos";
+    var today = DateOnly.FromDateTime(DateTime.Today);
+}
+
+<h1>Contratos de Aluguer</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Novo contrato</a>
+</p>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">Ainda não existem contratos registados.</p>
+}
+else
+{
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Veículo</th>
+                <th>Início</th>
+                <th>Fim</th>
+                <th class="text-end">Km iniciais</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Client?.Name</td>
+                    <td>@item.Vehicle?.Brand @item.Vehicle?.Model (@item.Vehicle?.LicensePlate)</td>
+                    <td>@item.StartDate?.ToString("dd/MM/yyyy")</td>
+                    <td>@item.EndDate?.ToString("dd/MM/yyyy")</td>
+                    <td class="text-end">@item.InitialMileage?.ToString("N0") km</td>
+                    <td>
+                        @* Estado do contrato calculado a partir das datas *@
+                        @if (item.StartDate > today)
+                        {
+                            <span class="badge bg-info text-dark">Agendado</span>
+                        }
+                        else if (item.EndDate < today)
+                        {
+                            <span class="badge bg-secondary">Terminado</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">Em curso</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">Detalhes</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
