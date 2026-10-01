@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Rental_Car_Project.Data;
 using Rental_Car_Project.Models;
+using Rental_Car_Project.ViewModels;
 
 namespace Rental_Car_Project.Controllers
 {
@@ -22,7 +23,20 @@ namespace Rental_Car_Project.Controllers
         // GET: Vehicles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Vehicles.ToListAsync());
+            var today = DateOnly.FromDateTime(DateTime.Today);
+
+            // Cria uma lista de veículos com a informação se estão alugados ou não
+            var vehicles = await _context.Vehicles
+                .OrderBy(v => v.Brand)
+                .ThenBy(v => v.Model)
+                .Select(v => new VehicleListItemViewModel
+                {
+                    Vehicle = v,
+                    IsRented = v.RentalContracts.Any(r => r.StartDate <= today && r.EndDate >= today)
+                })
+                .ToListAsync();
+
+            return View(vehicles);
         }
 
         // GET: Vehicles/Details/5

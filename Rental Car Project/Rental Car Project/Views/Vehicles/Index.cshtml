@@ -1,59 +1,59 @@
-﻿@model IEnumerable<Rental_Car_Project.Models.Vehicle>
+﻿@model IEnumerable<Rental_Car_Project.ViewModels.VehicleListItemViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Veículos";
 }
 
-<h1>Index</h1>
+<h1>Veículos</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-primary">Novo veículo</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Brand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Model)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LicensePlate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ManufactureYear)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FuelType)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Brand)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Model)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LicensePlate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ManufactureYear)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FuelType)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">Ainda não existem veículos registados.</p>
 }
-    </tbody>
-</table>
+else
+{
+    <table class="table table-hover align-middle">
+        <thead>
+            <tr>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Matrícula</th>
+                <th>Ano</th>
+                <th>Combustível</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Vehicle.Brand</td>
+                    <td>@item.Vehicle.Model</td>
+                    <td>@item.Vehicle.LicensePlate</td>
+                    <td>@item.Vehicle.ManufactureYear</td>
+                    <td>@Html.DisplayFor(_ => item.Vehicle.FuelType)</td>
+                    <td>
+                        @if (item.IsRented)
+                        {
+                            <span class="badge bg-danger">Alugado</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">Disponível</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Vehicle.Id">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.Vehicle.Id">Detalhes</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Vehicle.Id">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
