@@ -2,7 +2,7 @@
 
 namespace Rental_Car_Project.Models
 {
-    public class Vehicle
+    public class Vehicle : IValidatableObject
     {
         public int Id { get; set; }
 
